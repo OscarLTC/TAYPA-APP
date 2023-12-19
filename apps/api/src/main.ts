@@ -1,13 +1,17 @@
 import express from 'express';
-import * as path from 'path';
+import cors from 'cors';
+import { Firebase } from './app/config/Firebase';
+import { drinksRouter } from './app/routes/drinks.router';
 
 const app = express();
 
-app.use('/assets', express.static(path.join(__dirname, 'assets')));
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const firebase = new Firebase().initialize();
 
-app.get('/api', (req, res) => {
-  res.send({ message: 'Welcome to api!' });
-});
+app.use(cors({ origin: true }));
+app.use(express.json());
+
+app.use('/drinks', drinksRouter);
 
 const port = process.env.PORT || 3333;
 const server = app.listen(port, () => {
